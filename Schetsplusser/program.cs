@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace Schetsplusser_Namespace
+static class Program
 {
-    internal class program
+    [STAThreadAttribute]
+    static void Main()
     {
+        Application.Run(new SchetsEditor());
     }
 }
