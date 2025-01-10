@@ -5,13 +5,13 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
-
 public class SchetsWin : Form
 {
     MenuStrip menuStrip;
     SchetsControl schetscontrol;
     ISchetsTool huidigeTool;
     Panel paneel;
+    Elementen tekeningen;
     bool vast;
     public bool unsavedChanges = false;
 
@@ -75,7 +75,6 @@ public class SchetsWin : Form
                                 };
         String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan" };  // de mogelijke standaart kleuren
         int[] deDiktes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };   // de standaart diktes
-
         this.ClientSize = new Size(700, 500);
         huidigeTool = deTools[0];  // tool in gebruik
 
@@ -108,6 +107,9 @@ public class SchetsWin : Form
 
         menuStrip = new MenuStrip();
         menuStrip.Visible = false;
+
+        tekeningen = new Elementen();
+
         this.Controls.Add(menuStrip);
         this.maakFileMenu();
         this.maakToolMenu(deTools);
@@ -169,6 +171,10 @@ public class SchetsWin : Form
         }
         menu.DropDownItems.Add(kleurkeuze);
         menu.DropDownItems.Add(diktekeuze);
+        ToolStripMenuItem undo = new ToolStripMenuItem("Undo");
+        ToolStripMenuItem redo = new ToolStripMenuItem("Redo");
+        menu.DropDownItems.Add("Undo", null, tekeningen.Undo);
+        menu.DropDownItems.Add("Redo", null, tekeningen.Redo);
         menuStrip.Items.Add(menu);
     }
 
@@ -236,5 +242,15 @@ public class SchetsWin : Form
             dik.Items.Add(dValue.ToString());
         }
         dik.SelectedIndex = 2;
+
+        Button undo = new Button(); paneel.Controls.Add(undo);  //roept undo aan in elementen
+        undo.Text = "Undo";
+        undo.Location = new Point(480, 0);
+        undo.Click += tekeningen.Undo;
+
+        Button redo = new Button(); paneel.Controls.Add(redo);  //roept redo aan in elementen
+        redo.Text = "Redo";
+        redo.Location = new Point(500, 0);
+        redo.Click += tekeningen.Redo;
     }
 }

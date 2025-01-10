@@ -9,7 +9,7 @@ public class SchetsEditor : Form
 
     public SchetsEditor()
     {
-        this.ClientSize = new Size(800, 600);  //de grijze achtergrond scherm
+        this.ClientSize = new Size(1000, 800);  // het grijze achtergrond scherm
         menuStrip = new MenuStrip();    // alles initaliseren
         this.Controls.Add(menuStrip);
         this.maakFileMenu();

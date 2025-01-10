@@ -78,14 +78,12 @@ public class SchetsControl : UserControl
     public void VeranderLijnDikte(object obj, EventArgs ea)
     {
         string dikte = ((ComboBox)obj).Text;
-        int diktevlijn = int.Parse(dikte);
         diktevanlijn = int.Parse(dikte);
     }
 
     public void VeranderLijnDikteViaMenu(object obj, EventArgs ea)
     {
         string dikte = ((ToolStripMenuItem)obj).Text;
-        int diktevlijn = int.Parse(dikte);
         diktevanlijn = int.Parse(dikte);
     }
 }
