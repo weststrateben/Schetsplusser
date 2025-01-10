@@ -1,0 +1,55 @@
+Wijzigingen SchetsPlus 
+
+Uitgevoerd: Opdracht 1 (Cirkels), opdracht 2 (Plaatje exporteren) en opdracht 5.2 (Lijnkdikte aanpassen).  
+
+ 
+
+Aanpassingen SchetsWin.cs 
+
+Toevoegen van bool ‘unsavedChanges’ om aan te geven of er onopgeslagen veranderingen zijn in het programma. Bij de declaratie staat deze direct op false. De bool wordt op true gezet bij; schetscontrol.MouseDown (wordt geklikt op de bitmap) en schetscontrol.KeyPress (word iets geschreven op de bitmap). Na het opslaan van het bestand wordt unsavedChanges weer op false gezet. 
+
+Toevoegen van ‘private void opslaanAls’ voor het openen van een dialoogvenster om de bitmap op te slaan als jpeg, png of bmp. 
+
+Toeveogen van ‘private void schrijfNaarFile’ voor het schrijven van de bitmap naar een bestand. 
+
+Aan ‘afsluiten’ een dubbele if toegevoegd voor wanneer er unsavedChanges zijn wanneer er op afsluiten in het menu geklikt wordt, om dan niet af te sluiten en een melding weer te geven. 
+
+In ‘public SchetsWin()’ integers gedeclareerd die gekozen kunnen worden als dikte van de lijnen. (int[] deDiktes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };) 
+
+‘private void SchetsWin_FormClosing’ toegevoegd om ook eerst te controleren of de bitmap wel is opgeslagen wanneer er op het kruisje rechtsboven geklikt wordt. 
+
+‘Kies dikte’ ToolStripMenuItem aangemaakt om dikte ook te kunnen kiezen uit het menu boven in beeld. 
+
+Label voor de pendikte aangemaakt die onderin het scherm naast penkleur weergegeven wordt. 
+
+Combobox voor het kiezen van de dikte (staat naast het label). 
+
+Toevoegen van CirkelTool() en VolCirkelTool() aan deTools.. 
+
+Toeveogen van Opslaan Als DropDownItem aan maakFileMenu. 
+
+ 
+
+Aanpassingen SchetsControl.cs 
+
+Declareren private int diktevanlijn. 
+
+Toevoegen van ‘public int DiktevLijn’. 
+
+Toevoegen van ‘public void LijnDikte’. HaHaalt de tekst uit de combobox en zet dit om naar een integer. 
+
+Toevoegen van ‘VeranderLijnDikteViaMenu’. Haalt de tekst uit het ToolStripMenuItem en zet dit om naar een integer. 
+
+ 
+
+Aanpassingen Tools.cs 
+
+Declareren van protected int dikte;. 
+
+Toevoegen van ‘dikte = s.DiktevLijn;’ aan MuisLos, zodat de dikte opnieuw word gecontroleerd en aangepast wanneer de muis word losgelaten. 
+
+Lijndikte van 3px op diverse plaatsen aangepast naar ‘dikte’, welke dan weer wordt bepaald door DiktevLijn. 
+
+Toevoegen van ‘CirkelTool’ om een Ellipse te tekenen (plaatje in icons heet cirkelkader.png). 
+
+Toevoegen van ‘VolCirkelTool’ om een volle cirkel te tekenen (plaatje heet cirkelvol.png). 
