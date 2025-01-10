@@ -32,7 +32,7 @@ public class Schets
             bitmap = nieuw;
         }
     }
-    public void Teken(Graphics gr)  //
+    public void Teken(Graphics gr)
     {
         gr.DrawImage(bitmap, 0, 0);
     }

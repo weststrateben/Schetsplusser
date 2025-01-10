@@ -6,6 +6,7 @@ using System.Windows.Forms;
 public class SchetsControl : UserControl
 {
     private Schets schets;
+    private Elementen tekeningen;
     private Color penkleur;
     private int diktevanlijn;
 
@@ -23,6 +24,11 @@ public class SchetsControl : UserControl
     {
         get { return schets; }
     }
+    public Elementen Elementen
+    {
+        get { return tekeningen; }
+        set { tekeningen = value; }
+    }
     public SchetsControl()
     {
         this.BorderStyle = BorderStyle.Fixed3D;
@@ -31,14 +37,16 @@ public class SchetsControl : UserControl
         this.Resize += this.veranderAfmeting;
         this.veranderAfmeting(null, null);
     }
-
-
     protected override void OnPaintBackground(PaintEventArgs e)
     {
     }
     private void teken(object o, PaintEventArgs pea)
     {
         schets.Teken(pea.Graphics);
+        foreach (Elementen.Tekening tekening in tekeningen.elementen )
+        {
+            
+        }
     }
     private void veranderAfmeting(object o, EventArgs ea)
     {

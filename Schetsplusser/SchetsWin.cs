@@ -75,7 +75,7 @@ public class SchetsWin : Form
                                 };
         String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan" };  // de mogelijke standaart kleuren
         int[] deDiktes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };   // de standaart diktes
-        this.ClientSize = new Size(700, 500);
+        this.ClientSize = new Size(800, 600);
         huidigeTool = deTools[0];  // tool in gebruik
 
         schetscontrol = new SchetsControl();  // we maken een schetscontrol aan
@@ -109,6 +109,7 @@ public class SchetsWin : Form
         menuStrip.Visible = false;
 
         tekeningen = new Elementen();
+        schetscontrol.Elementen = tekeningen;
 
         this.Controls.Add(menuStrip);
         this.maakFileMenu();
@@ -202,7 +203,7 @@ public class SchetsWin : Form
     private void maakActieButtons(String[] kleuren, int[] diktes)
     {
         paneel = new Panel(); this.Controls.Add(paneel);
-        paneel.Size = new Size(600, 24);
+        paneel.Size = new Size(900, 24);
 
         Button clear = new Button(); paneel.Controls.Add(clear);  // maakt een lege control pannel
         clear.Text = "Clear";
@@ -245,12 +246,12 @@ public class SchetsWin : Form
 
         Button undo = new Button(); paneel.Controls.Add(undo);  //roept undo aan in elementen
         undo.Text = "Undo";
-        undo.Location = new Point(480, 0);
+        undo.Location = new Point(570, 0);
         undo.Click += tekeningen.Undo;
 
         Button redo = new Button(); paneel.Controls.Add(redo);  //roept redo aan in elementen
         redo.Text = "Redo";
-        redo.Location = new Point(500, 0);
+        redo.Location = new Point(650, 0);
         redo.Click += tekeningen.Redo;
     }
 }
