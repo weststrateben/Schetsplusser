@@ -108,7 +108,7 @@ public class RechthoekTool : TweepuntTool
 
 public class CirkelTool : TweepuntTool
 {
-    public override string ToString() { return "cirkelkader"; }
+    public override string ToString() { return "cirkel"; }
 
     public override void Bezig(Graphics g, Point p1, Point p2)
     {
@@ -129,7 +129,7 @@ public class VolRechthoekTool : RechthoekTool
 
 public class VolCirkelTool : RechthoekTool
 {
-    public override string ToString() { return "cirkelvol"; }
+    public override string ToString() { return "bol"; }
 
     public override void Compleet(Graphics g, Point p1, Point p2)
     {

@@ -75,17 +75,17 @@ public class SchetsControl : UserControl
         penkleur = Color.FromName(kleurNaam);
     }
 
-    public void LijnDikte(object obj, EventArgs ea)
+    public void VeranderLijnDikte(object obj, EventArgs ea)
     {
         string dikte = ((ComboBox)obj).Text;
         int diktevlijn = int.Parse(dikte);
-        diktevanlijn = diktevlijn;
+        diktevanlijn = int.Parse(dikte);
     }
 
     public void VeranderLijnDikteViaMenu(object obj, EventArgs ea)
     {
         string dikte = ((ToolStripMenuItem)obj).Text;
         int diktevlijn = int.Parse(dikte);
-        diktevanlijn = diktevlijn;
+        diktevanlijn = int.Parse(dikte);
     }
 }

@@ -13,13 +13,13 @@ public class Schets
 
     public Schets()
     {
-        bitmap = new Bitmap(1, 1);
+        bitmap = new Bitmap(1, 1); 
     }
     public Graphics BitmapGraphics
     {
         get { return Graphics.FromImage(bitmap); }
     }
-    public void VeranderAfmeting(Size sz)
+    public void VeranderAfmeting(Size sz)   // past de size van de window aan
     {
         if (sz.Width > bitmap.Size.Width || sz.Height > bitmap.Size.Height)
         {
@@ -32,16 +32,16 @@ public class Schets
             bitmap = nieuw;
         }
     }
-    public void Teken(Graphics gr)
+    public void Teken(Graphics gr)  //
     {
         gr.DrawImage(bitmap, 0, 0);
     }
-    public void Schoon()
+    public void Schoon()  // make een nieuwe bitmap
     {
         Graphics gr = Graphics.FromImage(bitmap);
-        gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+        gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height); 
     }
-    public void Roteer()
+    public void Roteer()  // flip de bitmap
     {
         bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
     }

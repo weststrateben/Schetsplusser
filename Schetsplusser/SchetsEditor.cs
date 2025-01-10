@@ -9,8 +9,8 @@ public class SchetsEditor : Form
 
     public SchetsEditor()
     {
-        this.ClientSize = new Size(800, 600);
-        menuStrip = new MenuStrip();
+        this.ClientSize = new Size(800, 600);  //de grijze achtergrond scherm
+        menuStrip = new MenuStrip();    // alles initaliseren
         this.Controls.Add(menuStrip);
         this.maakFileMenu();
         this.maakHelpMenu();
@@ -20,18 +20,18 @@ public class SchetsEditor : Form
     }
     private void maakFileMenu()
     {
-        ToolStripDropDownItem menu = new ToolStripMenuItem("File");
-        menu.DropDownItems.Add("Nieuw", null, this.nieuw);
-        menu.DropDownItems.Add("Exit", null, this.afsluiten);
+        ToolStripDropDownItem menu = new ToolStripMenuItem("File");   // je maakt de File knop
+        menu.DropDownItems.Add("Nieuw", null, this.nieuw);  // roept functie nieuw aan
+        menu.DropDownItems.Add("Exit", null, this.afsluiten);   // roept functie afsluiten aan
         menuStrip.Items.Add(menu);
     }
     private void maakHelpMenu()
     {
-        ToolStripDropDownItem menu = new ToolStripMenuItem("Help");
-        menu.DropDownItems.Add("Over \"Schets\"", null, this.about);
+        ToolStripDropDownItem menu = new ToolStripMenuItem("Help");   // je maakt de Help knop
+        menu.DropDownItems.Add("Over \"Schets\"", null, this.about);   // roept functie about aan
         menuStrip.Items.Add(menu);
     }
-    private void about(object o, EventArgs ea)
+    private void about(object o, EventArgs ea)    // de tabs onder de Help knop
     {
         MessageBox.Show("Schets versie 2.0\n(c) UU Informatica 2022"
                         , "Over \"Schets\""
@@ -40,14 +40,14 @@ public class SchetsEditor : Form
                         );
     }
 
-    private void nieuw(object sender, EventArgs e)
+    private void nieuw(object sender, EventArgs e)  // de Nieuw knop onder File
     {
         SchetsWin s = new SchetsWin();
         s.MdiParent = this;
         s.Show();
     }
 
-    private void afsluiten(object sender, EventArgs e)
+    private void afsluiten(object sender, EventArgs e)  // de Exit knop onder File
     {
         this.Close();
     }
