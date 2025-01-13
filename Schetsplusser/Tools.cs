@@ -8,6 +8,7 @@ public interface ISchetsTool
     void MuisDrag(SchetsControl s, Point p);
     void MuisLos(SchetsControl s, Point p);
     void Letter(SchetsControl s, char c);
+    void Elementen(Elementen elementen);
 }
 
 public abstract class StartpuntTool : ISchetsTool
@@ -15,7 +16,12 @@ public abstract class StartpuntTool : ISchetsTool
     protected Point startpunt;
     protected Brush kwast;
     protected int dikte;
+    protected Elementen elementen;
 
+    public void Elementen(Elementen elementen)
+    {
+        this.elementen = elementen;
+    }
     public virtual void MuisVast(SchetsControl s, Point p)
     {
         startpunt = p;
@@ -103,16 +109,10 @@ public class RechthoekTool : TweepuntTool
     {
         g.DrawRectangle(MaakPen(kwast, dikte), TweepuntTool.Punten2Rechthoek(p1, p2));
     }
-}
 
-
-public class CirkelTool : TweepuntTool
-{
-    public override string ToString() { return "cirkel"; }
-
-    public override void Bezig(Graphics g, Point p1, Point p2)
+    public override void Compleet(Graphics g, Point p1, Point p2)
     {
-        g.DrawEllipse(MaakPen(kwast, dikte), TweepuntTool.Punten2Rechthoek(p1, p2));
+        new Elementen.Tekening(p1, p2, MaakPen(kwast, dikte), "kader", elementen);
     }
 }
 
@@ -122,22 +122,32 @@ public class VolRechthoekTool : RechthoekTool
 
     public override void Compleet(Graphics g, Point p1, Point p2)
     {
-        g.FillRectangle(kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
+        new Elementen.Tekening(p1, p2, MaakPen(kwast, dikte), "vlak", elementen);
     }
-
 }
 
-public class VolCirkelTool : RechthoekTool
+public class CirkelTool : TweepuntTool
 {
-    public override string ToString() { return "bol"; }
+    public override string ToString() { return "cirkel"; }
 
     public override void Bezig(Graphics g, Point p1, Point p2)
     {
         g.DrawEllipse(MaakPen(kwast, dikte), TweepuntTool.Punten2Rechthoek(p1, p2));
     }
+
     public override void Compleet(Graphics g, Point p1, Point p2)
     {
-        g.FillEllipse(kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
+        new Elementen.Tekening(p1, p2, MaakPen(kwast, dikte), "cirkel", elementen);
+    }
+}
+
+public class VolCirkelTool : CirkelTool
+{
+    public override string ToString() { return "bol"; }
+
+    public override void Compleet(Graphics g, Point p1, Point p2)
+    {
+        new Elementen.Tekening(p1, p2, MaakPen(kwast, dikte), "bol", elementen);
     }
 }
 
@@ -147,14 +157,13 @@ public class LijnTool : TweepuntTool
 
     public override void Bezig(Graphics g, Point p1, Point p2)
     {
-        g.DrawLine(MaakPen(this.kwast, dikte), p1, p2);
+        g.DrawLine(MaakPen(kwast, dikte), p1, p2);
     }
 }
 
-public class PenTool : LijnTool
+public class PenTool : LijnTool    // alle andere tools ook implementeren?
 {
     public override string ToString() { return "pen"; }
-
     public override void MuisDrag(SchetsControl s, Point p)
     {
         this.MuisLos(s, p);
@@ -165,7 +174,6 @@ public class PenTool : LijnTool
 public class GumTool : PenTool
 {
     public override string ToString() { return "gum"; }
-
     public override void Bezig(Graphics g, Point p1, Point p2)
     {
         g.DrawLine(MaakPen(Brushes.White, 7), p1, p2);

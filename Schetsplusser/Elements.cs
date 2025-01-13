@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using static System.Windows.Forms.AxHost;
 
 public class Elementen
 {
@@ -9,11 +12,13 @@ public class Elementen
     public List<Tekening> elementen;
     private List<(Veranderingen, Tekening)> undo;
     private List<(Veranderingen, Tekening)> redo;
-    public Elementen()
+    private SchetsControl schetscontrol;
+    public Elementen(SchetsControl control)
     {
         elementen = new List<Tekening>();
         undo = new List<(Veranderingen, Tekening)>();
         redo = new List<(Veranderingen, Tekening)>();
+        schetscontrol = control;
     }
     public void Omhoog_Tekening(Tekening tekening)
     {
@@ -54,14 +59,15 @@ public class Elementen
             }
             redo.Add(undo[undo.Count - 1]);
             undo.RemoveAt(undo.Count - 1);
+            schetscontrol.Invalidate();
         }
     }
     public void Redo(object o, EventArgs ea)
     {
         if (redo.Count > 0)
         {
-            Tekening tekening = undo[undo.Count - 1].Item2;
-            switch (undo[undo.Count - 1].Item1)
+            Tekening tekening = redo[redo.Count - 1].Item2;
+            switch (redo[redo.Count - 1].Item1)
             {
                 case Veranderingen.nieuw:
                     elementen.Remove(tekening);
@@ -81,6 +87,7 @@ public class Elementen
             }
             undo.Add(redo[redo.Count - 1]);
             redo.RemoveAt(redo.Count - 1);
+            schetscontrol.Invalidate();
         }
     }
     public class Tekening
@@ -88,20 +95,17 @@ public class Elementen
         public int lijst_positie;
         public Point start_punt { get; set; }
         public Point eind_punt { get; set; }
-        public Color kleur { get; set; }
-        public int lijnbreedte { get; set; }
+        public Pen pen { get; set; }
         public string Tool { get; set; }
-
-        public Tekening(Point start, Point eind, Color klr, int lijn_b, string tool, Elementen lijst)
+        public Tekening(Point p1, Point p2, Pen pens, string tool, Elementen elementen)
         {
-            start_punt = start;
-            eind_punt = eind;
-            kleur = klr;
-            lijnbreedte = lijn_b;
+            start_punt = p1;
+            eind_punt = p2;
+            pen = pens;
             Tool = tool;
-            lijst.undo.Add((Veranderingen.nieuw, this));
-            this.lijst_positie = lijst.elementen.Count - 1;
-            lijst.elementen.Add(this);
+            elementen.undo.Add((Veranderingen.nieuw, this));
+            this.lijst_positie = elementen.elementen.Count;
+            elementen.elementen.Add(this);
         }
     }
 }

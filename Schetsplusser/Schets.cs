@@ -5,15 +5,17 @@ using System.Drawing;
 public class Schets
 {
     private Bitmap bitmap;
+    private SchetsWin schetswin;
     public Bitmap Bitmap
     {
         get { return bitmap; }
     }
 
 
-    public Schets()
+    public Schets(SchetsWin schetswin)
     {
-        bitmap = new Bitmap(1, 1); 
+        bitmap = new Bitmap(1, 1);
+        this.schetswin = schetswin;
     }
     public Graphics BitmapGraphics
     {
@@ -39,7 +41,8 @@ public class Schets
     public void Schoon()  // make een nieuwe bitmap
     {
         Graphics gr = Graphics.FromImage(bitmap);
-        gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height); 
+        gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+        schetswin.unsavedChanges = false;
     }
     public void Roteer()  // flip de bitmap
     {

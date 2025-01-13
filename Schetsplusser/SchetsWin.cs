@@ -64,21 +64,9 @@ public class SchetsWin : Form
     }
     public SchetsWin()
     {
-        ISchetsTool[] deTools = { new PenTool()   // hier maken we echt de tools aan
-                                , new LijnTool()
-                                , new RechthoekTool()
-                                , new VolRechthoekTool()
-                                , new CirkelTool()
-                                , new VolCirkelTool()
-                                , new TekstTool()
-                                , new GumTool()
-                                };
-        String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan" };  // de mogelijke standaart kleuren
-        int[] deDiktes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };   // de standaart diktes
-        this.ClientSize = new Size(800, 600);
-        huidigeTool = deTools[0];  // tool in gebruik
-
-        schetscontrol = new SchetsControl();  // we maken een schetscontrol aan
+        schetscontrol = new SchetsControl(this);  // Create SchetsControl first
+        tekeningen = new Elementen(schetscontrol); // Then create Elementen with SchetsControl
+        schetscontrol.Elementen(tekeningen);
         schetscontrol.Location = new Point(64, 10);
         schetscontrol.MouseDown += (object o, MouseEventArgs mea) =>  // er wordt geklikt
         {
@@ -102,14 +90,29 @@ public class SchetsWin : Form
             huidigeTool.Letter(schetscontrol, kpea.KeyChar);
             unsavedChanges = true;
         };
+        ISchetsTool[] deTools = { new PenTool()   // hier maken we echt de tools aan
+                                , new LijnTool()
+                                , new RechthoekTool()
+                                , new VolRechthoekTool()
+                                , new CirkelTool()
+                                , new VolCirkelTool()
+                                , new TekstTool()
+                                , new GumTool()
+                                };
+        foreach (ISchetsTool tool in deTools)
+        {
+            tool.Elementen(tekeningen);
+        }
+        String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan" };  // de mogelijke standaart kleuren
+        int[] deDiktes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };   // de standaart diktes
+        this.ClientSize = new Size(800, 600);
+        huidigeTool = deTools[0];  // tool in gebruik
+
         this.FormClosing += SchetsWin_FormClosing;
         this.Controls.Add(schetscontrol);
 
         menuStrip = new MenuStrip();
         menuStrip.Visible = false;
-
-        tekeningen = new Elementen();
-        schetscontrol.Elementen = tekeningen;
 
         this.Controls.Add(menuStrip);
         this.maakFileMenu();
