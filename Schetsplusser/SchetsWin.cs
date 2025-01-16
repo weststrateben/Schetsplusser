@@ -103,7 +103,7 @@ public class SchetsWin : Form
         {
             tool.Elementen(tekeningen);
         }
-        String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan" };  // de mogelijke standaart kleuren
+        String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan", "Ander..."};  // de mogelijke standaart kleuren
         int[] deDiktes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };   // de standaart diktes
         this.ClientSize = new Size(800, 600);
         huidigeTool = deTools[0];  // tool in gebruik

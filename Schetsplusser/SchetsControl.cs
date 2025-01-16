@@ -6,7 +6,6 @@ using System.Windows.Forms;
 public class SchetsControl : UserControl
 {
     private Schets schets;
-    private SchetsWin schetswin;
     private Color penkleur;
     private Elementen tekeningen;
     private int diktevanlijn;
@@ -27,7 +26,6 @@ public class SchetsControl : UserControl
     {
         this.BorderStyle = BorderStyle.Fixed3D;
         this.schets = new Schets(parent);
-        schetswin = parent;
         this.Paint += this.teken;
         this.Resize += this.veranderAfmeting;
         this.veranderAfmeting(null, null);
@@ -97,13 +95,29 @@ public class SchetsControl : UserControl
     public void VeranderKleur(object obj, EventArgs ea)
     {
         string kleurNaam = ((ComboBox)obj).Text;
-        penkleur = Color.FromName(kleurNaam);
+        if (kleurNaam == "Ander...")
+        {
+            Kleur kleur = new Kleur(this);
+            kleur.ShowDialog();
+        }
+        else
+        {
+            penkleur = Color.FromName(kleurNaam);
+        }
     }
 
     public void VeranderKleurViaMenu(object obj, EventArgs ea)
     {
         string kleurNaam = ((ToolStripMenuItem)obj).Text;
-        penkleur = Color.FromName(kleurNaam);
+        if (kleurNaam == "Ander...")
+        {
+            Kleur kleur = new Kleur(this);
+            kleur.ShowDialog();
+        }
+        else
+        {
+            penkleur = Color.FromName(kleurNaam);
+        }
     }
 
     public void VeranderLijnDikte(object obj, EventArgs ea)
