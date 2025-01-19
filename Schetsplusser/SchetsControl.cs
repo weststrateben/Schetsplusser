@@ -65,6 +65,19 @@ public class SchetsControl : UserControl
                         TweepuntTool.Punten2Rechthoek(tekening.start_punt, tekening.eind_punt));
                     break;
 
+                case "lijn":
+                    pea.Graphics.DrawLine(tekening.pen, tekening.start_punt, tekening.eind_punt);
+                    break;
+
+                case "pen":
+                    pea.Graphics.DrawLine(tekening.pen, tekening.start_punt, tekening.eind_punt);
+                    break;
+
+                case "tekst":
+                    pea.Graphics.DrawString(tekening.Text, tekening.TextFont, tekening.pen.Brush,
+                    tekening.start_punt, StringFormat.GenericTypographic);
+                    break;
+
             }    
         }
     }

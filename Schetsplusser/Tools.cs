@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 
 public interface ISchetsTool
 {
@@ -46,13 +47,13 @@ public class TekstTool : StartpuntTool
         if (c >= 32)
         {
             Graphics gr = s.MaakBitmapGraphics();
-            Font font = new Font("Tahoma", 40);
+            Font font = new Font("Comic Sans MS", 40);
             string tekst = c.ToString();
-            SizeF sz =
+            SizeF sz = 
             gr.MeasureString(tekst, font, this.startpunt, StringFormat.GenericTypographic);
-            gr.DrawString(tekst, font, kwast,
-                                            this.startpunt, StringFormat.GenericTypographic);
-            // gr.DrawRectangle(Pens.Black, startpunt.X, startpunt.Y, sz.Width, sz.Height);
+            new Elementen.Tekening(startpunt, new Point(startpunt.X + (int)sz.Width, startpunt.Y), 
+            new Pen(kwast), "tekst", elementen, tekst, font);
+
             startpunt.X += (int)sz.Width;
             s.Invalidate();
         }
@@ -159,6 +160,10 @@ public class LijnTool : TweepuntTool
     {
         g.DrawLine(MaakPen(kwast, dikte), p1, p2);
     }
+    public override void Compleet(Graphics g, Point p1, Point p2)
+    {
+        new Elementen.Tekening(p1, p2, MaakPen(kwast, dikte), "lijn", elementen);
+    }
 }
 
 public class PenTool : LijnTool    // alle andere tools ook implementeren?
@@ -166,8 +171,9 @@ public class PenTool : LijnTool    // alle andere tools ook implementeren?
     public override string ToString() { return "pen"; }
     public override void MuisDrag(SchetsControl s, Point p)
     {
-        this.MuisLos(s, p);
-        this.MuisVast(s, p);
+        MuisLos(s, p);
+        new Elementen.Tekening(startpunt, p, MaakPen(kwast, dikte), "pen", elementen);
+        startpunt = p;
     }
 }
 
