@@ -103,6 +103,7 @@ public class SchetsControl : UserControl
     {
         schets.VeranderAfmeting(new Size(this.ClientSize.Height, this.ClientSize.Width));
         schets.Roteer();
+        this.Schoon(null, null); // Verwijdert de bug met de zwarte vlakken bij het roteren
         this.Invalidate();
     }
     public void VeranderKleur(object obj, EventArgs ea)
