@@ -6,13 +6,14 @@ using System.Windows.Forms;
 public class SchetsControl : UserControl
 {
     private Schets schets;
-    private Color penkleur;
+    public Color penkleur;
     private Elementen tekeningen;
     private int diktevanlijn;
 
     public Color PenKleur
     {
         get { return penkleur; }
+        set { penkleur = value; }
     }
     public int DiktevLijn
     {
@@ -29,7 +30,7 @@ public class SchetsControl : UserControl
         this.Paint += this.teken;
         this.Resize += this.veranderAfmeting;
         this.veranderAfmeting(null, null);
-        this.DoubleBuffered = true;  // heb dit van chatgpt was de enige manier om de flikker makkelijk te fixen
+        this.DoubleBuffered = true;  
     }
     public void Elementen(Elementen tekeningen)
     {

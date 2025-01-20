@@ -11,7 +11,6 @@ public class Kleur : Form
     private Bitmap bitmap;
     private TrackBar slider;
     private Panel colorPreview;
-    private int v_waarden;
     public Color selected_kleur;
     private bool geklikt = false;
     private Point hier;
@@ -20,7 +19,8 @@ public class Kleur : Form
     public Kleur(SchetsControl parent)
     {
         this.schetscontrol = parent;
-        this.ClientSize = new Size(285, 350);
+        this.ClientSize = new Size(285, 380);
+        this.FormBorderStyle = FormBorderStyle.FixedDialog;
         this.BackColor = Color.White;
 
         colorPreview = new Panel();
@@ -29,6 +29,16 @@ public class Kleur : Form
         colorPreview.BorderStyle = BorderStyle.Fixed3D;
         colorPreview.BackColor = Color.White;
         this.Controls.Add(colorPreview);
+
+        Button oke = new Button();
+        oke.Location = new Point(10, 350);
+        oke.Text = "OK";
+        this.Controls.Add((oke));
+
+        Button cancel = new Button();
+        cancel.Location = new Point(100, 350);
+        cancel.Text = "Cancel";
+        this.Controls.Add(cancel);
 
         slider = new TrackBar();
         slider.Location = new Point(80, 280);
@@ -42,31 +52,39 @@ public class Kleur : Form
 
         bitmap = new Bitmap(259, 259);
         Graphics gr = Graphics.FromImage(bitmap);
+        
+        Kleurwiel();
+        gr.DrawEllipse(new Pen(Color.Black, 3), 0, 0, 254, 254);
+        gr.DrawImage(bitmap, 0, 0);
+        this.DoubleBuffered = true;
+
+        this.Paint += Kleur_teken;
+        this.MouseClick += Klik_Kleurwiel;
+        this.MouseMove += Beweeg;
+        oke.MouseClick += knop_oke;
+        cancel.MouseClick += knop_cancel;
+    }
+    private void V_Slider(object sender, EventArgs e)
+    {
+        Kleurwiel();
+        if (selected_kleur != Color.Empty)
+        {
+            selected_kleur = ColorFromHSV(cirkle_graden(mid, hier), cirkle_afstand(mid, hier)/127, slider.Value);
+            colorPreview.BackColor = selected_kleur;
+        }
+    }
+    private void Kleurwiel()
+    {
         for (int i = 1; i < 255; i++)
         {
             for (int j = 1; j < 255; j++)
             {
                 Point p = new Point(i, j);
                 if (cirkle_afstand(mid, p) <= 127)
-                    bitmap.SetPixel(i, j, ColorFromHSV(cirkle_graden(mid, p), van_0_tot_1(cirkle_afstand(mid, p))));
+                    bitmap.SetPixel(i, j, ColorFromHSV(cirkle_graden(mid, p),cirkle_afstand(mid, p)/127, slider.Value));
             }
         }
-        gr.DrawEllipse(new Pen(Color.Black, 3), 0, 0, 254, 254);
-        gr.DrawImage(bitmap, 0, 0);
-
-        this.Paint += Kleur_teken;
-        this.MouseClick += Klik_Kleurwiel;
-        this.MouseMove += Beweeg;
-    }
-    private void V_Slider(object sender, EventArgs e)
-    {
-        this.DoubleBuffered = true;
-        if (selected_kleur != Color.Empty)
-        {
-            v_waarden = slider.Value;
-            selected_kleur = ColorFromHSV(cirkle_graden(mid, hier), van_0_tot_1(cirkle_afstand(mid, hier)));
-            colorPreview.BackColor = selected_kleur;
-        }
+        this.Refresh();
     }
 
     private void Klik_Kleurwiel(object sender, MouseEventArgs e)
@@ -91,23 +109,23 @@ public class Kleur : Form
         {
             int pixelX = mea.X - 15;
             int pixelY = mea.Y - 15;
-            if (cirkle_afstand(mid, new Point(pixelX, pixelY)) <= 127);
+            if (cirkle_afstand(mid, new Point(pixelX, pixelY)) <= 127)
             {
                 Color pixelkleur = bitmap.GetPixel(pixelX, pixelY);
                 colorPreview.BackColor = pixelkleur;
             }
         }
     }
-    private Color ColorFromHSV(double hue, double saturation)  // te ingewikkeld gewoon van internet geplukt akkoord
+    private Color ColorFromHSV(double hue, double saturation, double slider)  // te ingewikkeld gewoon van internet geplukt akkoord
     {
         int hi = (int)(hue / 60) % 6;
         double f = hue / 60 - Math.Floor(hue / 60);
 
-        int value = 255;
-        int v = (int)(value);
-        int p = (int)(value * (1 - saturation));
-        int q = (int)(value * (1 - f * saturation));
-        int t = (int)(value * (1 - (1 - f) * saturation));
+        //int value = (int)(slider / 255);
+        int v = (int)(slider);
+        int p = (int)(slider * (1 - saturation));
+        int q = (int)(slider * (1 - f * saturation));
+        int t = (int)(slider * (1 - (1 - f) * saturation));
 
         if (hi == 0)
             return Color.FromArgb(255, v, t, p);
@@ -139,9 +157,17 @@ public class Kleur : Form
         double dy = Math.Abs(mid.Y - p.Y);
         return Math.Sqrt(dx * dx + dy * dy);
     }
-    private double van_0_tot_1(double afstand) //akkoord
+    public void knop_oke(object sender, MouseEventArgs mea)
     {
-        return afstand / 127;
+        if (geklikt)
+        {
+            schetscontrol.PenKleur = selected_kleur;
+            this.Close();
+        }
+    }
+    public void knop_cancel(object sender, MouseEventArgs mea)
+    {
+        this.Close();
     }
 }
 
