@@ -180,8 +180,16 @@ public class PenTool : LijnTool    // alle andere tools ook implementeren?
 public class GumTool : PenTool
 {
     public override string ToString() { return "gum"; }
+
     public override void Bezig(Graphics g, Point p1, Point p2)
     {
-        g.DrawLine(MaakPen(Brushes.White, 7), p1, p2);
+        g.DrawLine(MaakPen(Brushes.White, dikte), p1, p2);
+    }
+
+    public override void MuisDrag(SchetsControl s, Point p)
+    {
+        new Elementen.Tekening(startpunt, p, MaakPen(Brushes.White, dikte), "pen", elementen);
+        startpunt = p;
+        s.Invalidate();
     }
 }
