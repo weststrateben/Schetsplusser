@@ -65,6 +65,19 @@ public class SchetsControl : UserControl
                         TweepuntTool.Punten2Rechthoek(tekening.start_punt, tekening.eind_punt));
                     break;
 
+                case "lijn":
+                    pea.Graphics.DrawLine(tekening.pen, tekening.start_punt, tekening.eind_punt);
+                    break;
+
+                case "pen":
+                    pea.Graphics.DrawLine(tekening.pen, tekening.start_punt, tekening.eind_punt);
+                    break;
+
+                case "tekst":
+                    pea.Graphics.DrawString(tekening.Text, tekening.TextFont, tekening.pen.Brush,
+                    tekening.start_punt, StringFormat.GenericTypographic);
+                    break;
+
             }    
         }
     }
@@ -90,6 +103,7 @@ public class SchetsControl : UserControl
     {
         schets.VeranderAfmeting(new Size(this.ClientSize.Height, this.ClientSize.Width));
         schets.Roteer();
+        this.Schoon(null, null); // Verwijdert de bug met de zwarte vlakken bij het roteren
         this.Invalidate();
     }
     public void VeranderKleur(object obj, EventArgs ea)

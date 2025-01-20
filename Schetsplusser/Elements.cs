@@ -97,12 +97,18 @@ public class Elementen
         public Point eind_punt { get; set; }
         public Pen pen { get; set; }
         public string Tool { get; set; }
-        public Tekening(Point p1, Point p2, Pen pens, string tool, Elementen elementen)
+
+        public string Text { get; set; }
+        public Font TextFont { get; set; }
+
+        public Tekening(Point p1, Point p2, Pen pens, string tool, Elementen elementen, string text = null, Font font = null)
         {
             start_punt = p1;
             eind_punt = p2;
             pen = pens;
             Tool = tool;
+            Text = text;
+            TextFont = font;
             elementen.undo.Add((Veranderingen.nieuw, this));
             this.lijst_positie = elementen.elementen.Count;
             elementen.elementen.Add(this);
