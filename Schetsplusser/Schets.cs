@@ -11,7 +11,6 @@ public class Schets
         get { return bitmap; }
     }
 
-
     public Schets(SchetsWin schetswin)
     {
         bitmap = new Bitmap(1, 1);
@@ -23,7 +22,7 @@ public class Schets
     }
     public void VeranderAfmeting(Size sz)   // past de size van de window aan
     {
-        if (sz.Width > bitmap.Size.Width || sz.Height > bitmap.Size.Height)
+        if (sz.Width > 0 || sz.Height > 0)
         {
             Bitmap nieuw = new Bitmap(Math.Max(sz.Width, bitmap.Size.Width)
                                      , Math.Max(sz.Height, bitmap.Size.Height)

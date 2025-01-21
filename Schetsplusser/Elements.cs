@@ -7,7 +7,7 @@ using static System.Windows.Forms.AxHost;
 
 public class Elementen
 {
-    internal enum Veranderingen {nieuw, oud, omhoog, omlaag}
+    internal enum Veranderingen { nieuw, oud, omhoog, omlaag }
 
     public List<Tekening> elementen;
     private List<(Veranderingen, Tekening)> undo;
@@ -90,6 +90,17 @@ public class Elementen
             schetscontrol.Invalidate();
         }
     }
+    public void Verander_afmetingen(Size oud, Size nieuw)
+    {
+        foreach (Tekening tekening in elementen)
+        {
+            float scale_x = (float)nieuw.Width / (float)oud.Width;
+            float scale_y = (float)nieuw.Height / (float)oud.Height;
+
+            tekening.start_punt = new Point((int)(tekening.start_punt.X * scale_x),(int)(tekening.start_punt.Y * scale_y));
+            tekening.eind_punt = new Point((int)(tekening.eind_punt.X * scale_x),(int)(tekening.eind_punt.Y * scale_y));
+        }
+    }
     public class Tekening
     {
         public int lijst_positie;
@@ -97,9 +108,9 @@ public class Elementen
         public Point eind_punt { get; set; }
         public Pen pen { get; set; }
         public string Tool { get; set; }
-
         public string Text { get; set; }
         public Font TextFont { get; set; }
+
 
         public Tekening(Point p1, Point p2, Pen pens, string tool, Elementen elementen, string text = null, Font font = null)
         {

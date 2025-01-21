@@ -9,6 +9,7 @@ public class SchetsControl : UserControl
     public Color penkleur;
     private Elementen tekeningen;
     private int diktevanlijn;
+    private Size originele_vorm;
 
     public Color PenKleur
     {
@@ -29,8 +30,9 @@ public class SchetsControl : UserControl
         this.schets = new Schets(parent);
         this.Paint += this.teken;
         this.Resize += this.veranderAfmeting;
-        this.veranderAfmeting(null, null);
-        this.DoubleBuffered = true;  
+        this.originele_vorm = this.Size;  
+        this.veranderAfmeting(null, null); 
+        this.DoubleBuffered = true;
     }
     public void Elementen(Elementen tekeningen)
     {
@@ -82,10 +84,16 @@ public class SchetsControl : UserControl
             }    
         }
     }
-
     private void veranderAfmeting(object o, EventArgs ea)
     {
         schets.VeranderAfmeting(this.ClientSize);
+        if (tekeningen != null)
+        {
+            Size oud = new Size(originele_vorm.Width, originele_vorm.Height);
+            Size nieuw = new Size(this.ClientSize.Width, this.ClientSize.Height);
+            tekeningen.Verander_afmetingen(oud, nieuw);
+            originele_vorm = this.ClientSize;
+        }
         this.Invalidate();
     }
     public Graphics MaakBitmapGraphics()

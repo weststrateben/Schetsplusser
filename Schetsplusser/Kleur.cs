@@ -99,11 +99,11 @@ public class Kleur : Form
         }
     }
 
-    private void Kleur_teken(object sender, PaintEventArgs e) //akkoord
+    private void Kleur_teken(object sender, PaintEventArgs e) 
     {
         e.Graphics.DrawImage(bitmap, 15, 15);
     }
-    private void Beweeg(object sender, MouseEventArgs mea) //akkoord
+    private void Beweeg(object sender, MouseEventArgs mea) 
     {
         if (!geklikt)
         {
@@ -121,7 +121,6 @@ public class Kleur : Form
         int hi = (int)(hue / 60) % 6;
         double f = hue / 60 - Math.Floor(hue / 60);
 
-        //int value = (int)(slider / 255);
         int v = (int)(slider);
         int p = (int)(slider * (1 - saturation));
         int q = (int)(slider * (1 - f * saturation));
@@ -140,7 +139,7 @@ public class Kleur : Form
         else
             return Color.FromArgb(255, v, p, q);
     }
-    private double cirkle_graden(Point mid, Point p) //akkoord
+    private double cirkle_graden(Point mid, Point p) 
     {
         double radian = Math.Atan2(p.Y - mid.Y, p.X - mid.X);
         double graden = radian * (180 / Math.PI);
@@ -151,7 +150,7 @@ public class Kleur : Form
         }
         return graden;
     }
-    private double cirkle_afstand(Point mid, Point p) //akkoord
+    private double cirkle_afstand(Point mid, Point p) 
     {
         double dx = Math.Abs(mid.X - p.X);
         double dy = Math.Abs(mid.Y - p.Y);

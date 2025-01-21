@@ -11,7 +11,7 @@ public class SchetsWin : Form
     SchetsControl schetscontrol;
     ISchetsTool huidigeTool;
     Panel paneel;
-    Elementen tekeningen;
+    public Elementen tekeningen;
     bool vast;
     public bool unsavedChanges = false;
 
