@@ -166,7 +166,7 @@ public class LijnTool : TweepuntTool
     }
 }
 
-public class PenTool : LijnTool    // alle andere tools ook implementeren?
+public class PenTool : LijnTool   
 {
     public override string ToString() { return "pen"; }
     public override void MuisDrag(SchetsControl s, Point p)
@@ -179,17 +179,99 @@ public class PenTool : LijnTool    // alle andere tools ook implementeren?
 
 public class GumTool : PenTool
 {
-    public override string ToString() { return "gum"; }
+    private Elementen.Tekening tekening;
 
-    public override void Bezig(Graphics g, Point p1, Point p2)
-    {
-        g.DrawLine(MaakPen(Brushes.White, dikte), p1, p2);
-    }
+    public override string ToString() { return "gum"; }
 
     public override void MuisDrag(SchetsControl s, Point p)
     {
-        new Elementen.Tekening(startpunt, p, MaakPen(Brushes.White, dikte), "pen", elementen);
-        startpunt = p;
-        s.Invalidate();
+    }
+
+    public override void Letter(SchetsControl s, char c) { }
+
+    public override void MuisVast(SchetsControl s, Point p)
+    {
+        base.MuisVast(s, p);
+        tekening = elementen.Welke_Tekening(p);
+    }
+
+    public override void MuisLos(SchetsControl s, Point p)
+    {
+        if (tekening != null)elementen.Verwijder_Tekening(tekening);
+    }
+}
+
+
+public class MoveTool : StartpuntTool
+{
+    private Elementen.Tekening tekening;
+    private Point punt;
+
+    public override string ToString() { return "zet"; }
+
+    public override void MuisDrag(SchetsControl s, Point p)
+    {
+        if (tekening != null)
+        {
+           elementen.Beweeg_Tekening(tekening, punt, p);
+           punt = p;
+           s.Invalidate();
+        }
+    }
+
+    public override void Letter(SchetsControl s, char c) { }
+
+    public override void MuisVast(SchetsControl s, Point p)
+    {
+        base.MuisVast(s, p);
+        tekening = elementen.Welke_Tekening(p);
+        punt = p;
+    }
+}
+
+public class UpTool : StartpuntTool
+{
+    private Elementen.Tekening tekening;
+
+    public override string ToString() { return "op"; }
+
+    public override void MuisDrag(SchetsControl s, Point p)
+    {
+    }
+
+    public override void Letter(SchetsControl s, char c) { }
+
+    public override void MuisVast(SchetsControl s, Point p)
+    {
+        base.MuisVast(s, p);
+        tekening = elementen.Welke_Tekening(p);
+    }
+
+    public override void MuisLos(SchetsControl s, Point p)
+    {
+        if (tekening != null) elementen.Omhoog_Tekening(tekening);
+    }
+}
+public class DownTool : StartpuntTool
+{
+    private Elementen.Tekening tekening;
+
+    public override string ToString() { return "neer"; }
+
+    public override void MuisDrag(SchetsControl s, Point p)
+    {
+    }
+
+    public override void Letter(SchetsControl s, char c) { }
+
+    public override void MuisVast(SchetsControl s, Point p)
+    {
+        base.MuisVast(s, p);
+        tekening = elementen.Welke_Tekening(p);
+    }
+
+    public override void MuisLos(SchetsControl s, Point p)
+    {
+        if (tekening != null) elementen.Omlaag_Tekening(tekening);
     }
 }

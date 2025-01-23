@@ -1,9 +1,6 @@
 ﻿using System.Windows.Forms;
 using System.Drawing;
-using System.Security.Policy;
 using System;
-using System.Drawing.Drawing2D;
-using System.Security.Cryptography;
 
 public class Kleur : Form
 {
@@ -116,7 +113,8 @@ public class Kleur : Form
             }
         }
     }
-    private Color ColorFromHSV(double hue, double saturation, double slider)  // te ingewikkeld gewoon van internet geplukt akkoord
+    private Color ColorFromHSV(double hue, double saturation, double slider)  
+
     {
         int hi = (int)(hue / 60) % 6;
         double f = hue / 60 - Math.Floor(hue / 60);

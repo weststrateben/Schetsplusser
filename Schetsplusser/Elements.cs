@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using static System.Windows.Forms.AxHost;
+
 
 public class Elementen
 {
@@ -22,18 +20,52 @@ public class Elementen
     }
     public void Omhoog_Tekening(Tekening tekening)
     {
-        tekening.lijst_positie = elementen.IndexOf(tekening);
-        undo.Add((Veranderingen.omhoog, tekening));
+        if (tekening != null)
+        {
+            int index = elementen.IndexOf(tekening);
+            if (index < elementen.Count - 1)  
+            {
+                tekening.lijst_positie = index;  
+                elementen.RemoveAt(index);
+                elementen.Insert(elementen.Count, tekening);
+                undo.Add((Veranderingen.omhoog, tekening));
+                schetscontrol.Invalidate();
+            }
+        }
     }
+
     public void Omlaag_Tekening(Tekening tekening)
     {
-        tekening.lijst_positie = elementen.IndexOf(tekening);
-        undo.Add((Veranderingen.omlaag, tekening));
+        if (tekening != null)
+        {
+            int index = elementen.IndexOf(tekening);
+            if (index > 0) 
+            {
+                tekening.lijst_positie = index; 
+                elementen.RemoveAt(index);
+                elementen.Insert(0, tekening);
+                undo.Add((Veranderingen.omlaag, tekening));
+                schetscontrol.Invalidate();
+            }
+        }
     }
     public void Verwijder_Tekening(Tekening tekening)
     {
-        tekening.lijst_positie = elementen.IndexOf(tekening);
-        undo.Add((Veranderingen.oud, tekening));
+        if (tekening != null)
+        {
+            tekening.lijst_positie = elementen.IndexOf(tekening);
+            undo.Add((Veranderingen.oud, tekening));
+            elementen.Remove(tekening);
+            schetscontrol.Invalidate(); 
+        }
+    }
+    public void Beweeg_Tekening(Tekening tekening, Point klik, Point beweeg)
+    {
+        int dx = beweeg.X - klik.X;
+        int dy = beweeg.Y - klik.Y;
+
+        tekening.start_punt = new Point(tekening.start_punt.X + dx, tekening.start_punt.Y + dy);
+        tekening.eind_punt = new Point(tekening.eind_punt.X + dx, tekening.eind_punt.Y + dy);
     }
     public void Undo(object o, EventArgs ea)
     {
@@ -78,7 +110,7 @@ public class Elementen
                     break;
                 case Veranderingen.omhoog:
                     elementen.Remove(tekening);
-                    elementen.Add(tekening);
+                    elementen.Insert(elementen.Count, tekening);
                     break;
                 case Veranderingen.omlaag:
                     elementen.Remove(tekening);
@@ -90,22 +122,130 @@ public class Elementen
             schetscontrol.Invalidate();
         }
     }
-    public void Verander_afmetingen(Size oud, Size nieuw)
+    public Tekening Welke_Tekening(Point klik)
     {
-        foreach (Tekening tekening in elementen)
+        for (int i = elementen.Count - 1; i >= 0; i--)
         {
-            float scale_x = (float)nieuw.Width / (float)oud.Width;
-            float scale_y = (float)nieuw.Height / (float)oud.Height;
-
-            tekening.start_punt = new Point((int)(tekening.start_punt.X * scale_x),(int)(tekening.start_punt.Y * scale_y));
-            tekening.eind_punt = new Point((int)(tekening.eind_punt.X * scale_x),(int)(tekening.eind_punt.Y * scale_y));
+            Tekening tekening = elementen[i];
+            switch (tekening.Tool)
+            {
+                case "lijn":
+                case "pen":
+                    if (lijn(klik, tekening)) return tekening;
+                    break;
+                case "kader":
+                    if (kader(klik, tekening)) return tekening;
+                    break;
+                case "vlak":
+                    if (vlak(klik, tekening)) return tekening;
+                    break;
+                case "cirkel":
+                    if (cirkel(klik, tekening)) return tekening;
+                    break;
+                case "bol":
+                    if (bol(klik, tekening)) return tekening;
+                    break;
+                case "tekst":
+                    if (tekst(klik, tekening)) return tekening;
+                    break;    
+            }
         }
+        return null;
+    }
+    public bool lijn(Point klik, Tekening tekening)
+    {
+        double tolerantie = 3 + (tekening.pen.Width / 2);
+
+        double dx = tekening.eind_punt.X - tekening.start_punt.X;
+        double dy = tekening.eind_punt.Y - tekening.start_punt.Y;
+        double lijn_lengte = dx * dx + dy * dy;
+
+        double t = ((klik.X - tekening.start_punt.X) * dx + (klik.Y - tekening.start_punt.Y) * dy) / lijn_lengte;
+
+        double lijn_puntx = tekening.start_punt.X + t * dx;
+        double lijn_punty = tekening.start_punt.Y + t * dy;
+        double afstand = Math.Sqrt(Math.Pow(klik.X - lijn_puntx, 2) + Math.Pow(klik.Y - lijn_punty, 2));
+
+        return afstand <= tolerantie;
+    }
+    public bool kader(Point klik, Tekening tekening)
+    {
+        int rechts = Math.Max(tekening.start_punt.X, tekening.eind_punt.X);
+        int links = Math.Min(tekening.start_punt.X, tekening.eind_punt.X);
+        int boven = Math.Max(tekening.start_punt.Y, tekening.eind_punt.Y);
+        int onder = Math.Min(tekening.start_punt.Y, tekening.eind_punt.Y);
+
+        double tol = tekening.pen.Width / 2 + 3;
+
+        return Math.Abs(rechts - klik.X) <= tol ||
+               Math.Abs(links - klik.X) <= tol || 
+               Math.Abs(boven - klik.Y) <= tol || 
+               Math.Abs(onder - klik.Y) <= tol;
+    }
+    public bool vlak(Point klik, Tekening tekening)
+    {
+        int rechts = Math.Max(tekening.start_punt.X, tekening.eind_punt.X);
+        int links = Math.Min(tekening.start_punt.X, tekening.eind_punt.X);
+        int boven = Math.Max(tekening.start_punt.Y, tekening.eind_punt.Y);
+        int onder = Math.Min(tekening.start_punt.Y, tekening.eind_punt.Y);
+
+        double tol = tekening.pen.Width / 2 + 3;
+
+        return (links - tol < klik.X && rechts + tol > klik.X) && (boven + tol > klik.Y && onder - tol < klik.Y);
+    }
+    public bool cirkel(Point klik, Tekening tekening)
+    {
+        int a = Math.Max(tekening.groote.Width / 2, tekening.groote.Height / 2);
+        int b = Math.Min(tekening.groote.Width / 2, tekening.groote.Height / 2);
+        double c_lengte = Math.Sqrt(Math.Pow(a, 2) - Math.Pow(b, 2));
+        Point mid = new Point((tekening.start_punt.X + tekening.eind_punt.X) / 2, (tekening.start_punt.Y + tekening.eind_punt.Y) / 2);
+
+        Point c1 = new Point(mid.X, mid.Y - (int)c_lengte);
+        Point c2 = new Point(mid.X, mid.Y + (int)c_lengte);
+        if (tekening.groote.Width >= tekening.groote.Height)
+        {
+            c1 = new Point(mid.X - (int)c_lengte, mid.Y);
+            c2 = new Point(mid.X + (int)c_lengte, mid.Y);
+        }
+
+        double afstand_c1 = Math.Sqrt(Math.Pow(klik.X - c1.X, 2) + Math.Pow(klik.Y - c1.Y, 2));
+        double afstand_c2 = Math.Sqrt(Math.Pow(klik.X - c2.X, 2) + Math.Pow(klik.Y - c2.Y, 2));
+        double tol = tekening.pen.Width / 2 + 3;
+
+        return afstand_c1 + afstand_c2 <= 2 * a + tol && afstand_c1 + afstand_c2 >= 2 * a - tol;
+    }
+    public bool bol(Point klik, Tekening tekening)
+    {
+        int a = Math.Max(tekening.groote.Width / 2, tekening.groote.Height / 2);
+        int b = Math.Min(tekening.groote.Width / 2, tekening.groote.Height / 2);
+        double c_lengte = Math.Sqrt(Math.Pow(a, 2) - Math.Pow(b, 2));
+        Point mid = new Point((tekening.start_punt.X + tekening.eind_punt.X) / 2, (tekening.start_punt.Y + tekening.eind_punt.Y) / 2);
+
+        Point c1 = new Point(mid.X, mid.Y - (int)c_lengte);
+        Point c2 = new Point(mid.X, mid.Y + (int)c_lengte);
+        if (tekening.groote.Width >= tekening.groote.Height)
+        {
+            c1 = new Point(mid.X - (int)c_lengte, mid.Y);
+            c2 = new Point(mid.X + (int)c_lengte, mid.Y);
+        }
+
+        double afstand_c1 = Math.Sqrt(Math.Pow(klik.X - c1.X, 2) + Math.Pow(klik.Y - c1.Y, 2));
+        double afstand_c2 = Math.Sqrt(Math.Pow(klik.X - c2.X, 2) + Math.Pow(klik.Y - c2.Y, 2));
+        double tol = tekening.pen.Width / 2 + 3;
+
+        return afstand_c1 + afstand_c2 <= 2 * a + tol;
+    }
+    public bool tekst(Point klik, Tekening tekening)
+    {
+        Rectangle tekst_box = new Rectangle(tekening.start_punt, new Size(tekening.eind_punt.X - tekening.start_punt.X, 60));
+        return tekst_box.Contains(klik);
     }
     public class Tekening
     {
         public int lijst_positie;
         public Point start_punt { get; set; }
         public Point eind_punt { get; set; }
+        public Size groote { get; set; }
         public Pen pen { get; set; }
         public string Tool { get; set; }
         public string Text { get; set; }
@@ -116,6 +256,7 @@ public class Elementen
         {
             start_punt = p1;
             eind_punt = p2;
+            groote = new Size(Math.Abs(p1.X - p2.X), Math.Abs(p1.Y - p2.Y));
             pen = pens;
             Tool = tool;
             Text = text;

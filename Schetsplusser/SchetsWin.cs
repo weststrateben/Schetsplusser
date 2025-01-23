@@ -98,14 +98,17 @@ public class SchetsWin : Form
                                 , new VolCirkelTool()
                                 , new TekstTool()
                                 , new GumTool()
+                                , new MoveTool()
+                                , new UpTool()
+                                , new DownTool()
                                 };
         foreach (ISchetsTool tool in deTools)
         {
             tool.Elementen(tekeningen);
         }
-        String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan", "Ander..."};  // de mogelijke standaart kleuren
+        String[] deKleuren = { "Black", "White", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan", "Ander..."};  // de mogelijke standaart kleuren
         int[] deDiktes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };   // de standaart diktes
-        this.ClientSize = new Size(800, 600);
+        this.ClientSize = new Size(800,700);
         huidigeTool = deTools[0];  // tool in gebruik
 
         this.FormClosing += SchetsWin_FormClosing;

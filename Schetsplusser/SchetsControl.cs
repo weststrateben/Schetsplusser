@@ -43,57 +43,51 @@ public class SchetsControl : UserControl
     }
     private void teken(object o, PaintEventArgs pea)
     {
-        schets.Teken(pea.Graphics);
+        schets.Schoon();
         foreach (Elementen.Tekening tekening in tekeningen.elementen )
         {
             switch (tekening.Tool)
             {
                 case "kader":
-                    pea.Graphics.DrawRectangle(tekening.pen,
+                    schets.BitmapGraphics.DrawRectangle(tekening.pen,
                         TweepuntTool.Punten2Rechthoek(tekening.start_punt, tekening.eind_punt));
                     break;
 
                 case "vlak":
-                    pea.Graphics.FillRectangle(tekening.pen.Brush,
+                    schets.BitmapGraphics.FillRectangle(tekening.pen.Brush,
                         TweepuntTool.Punten2Rechthoek(tekening.start_punt, tekening.eind_punt));
                     break;
 
                 case "cirkel":
-                    pea.Graphics.DrawEllipse(tekening.pen,
+                    schets.BitmapGraphics.DrawEllipse(tekening.pen,
                         TweepuntTool.Punten2Rechthoek(tekening.start_punt, tekening.eind_punt));
                     break;
 
                 case "bol":
-                    pea.Graphics.FillEllipse(tekening.pen.Brush,
+                    schets.BitmapGraphics.FillEllipse(tekening.pen.Brush,
                         TweepuntTool.Punten2Rechthoek(tekening.start_punt, tekening.eind_punt));
                     break;
 
                 case "lijn":
-                    pea.Graphics.DrawLine(tekening.pen, tekening.start_punt, tekening.eind_punt);
+                    schets.BitmapGraphics.DrawLine(tekening.pen, tekening.start_punt, tekening.eind_punt);
                     break;
 
                 case "pen":
-                    pea.Graphics.DrawLine(tekening.pen, tekening.start_punt, tekening.eind_punt);
+                    schets.BitmapGraphics.DrawLine(tekening.pen, tekening.start_punt, tekening.eind_punt);
                     break;
 
                 case "tekst":
-                    pea.Graphics.DrawString(tekening.Text, tekening.TextFont, tekening.pen.Brush,
+                    schets.BitmapGraphics.DrawString(tekening.Text, tekening.TextFont, tekening.pen.Brush,
                     tekening.start_punt, StringFormat.GenericTypographic);
                     break;
 
-            }    
+            }  
         }
+        schets.Teken(pea.Graphics);
     }
     private void veranderAfmeting(object o, EventArgs ea)
     {
         schets.VeranderAfmeting(this.ClientSize);
-        if (tekeningen != null)
-        {
-            Size oud = new Size(originele_vorm.Width, originele_vorm.Height);
-            Size nieuw = new Size(this.ClientSize.Width, this.ClientSize.Height);
-            tekeningen.Verander_afmetingen(oud, nieuw);
-            originele_vorm = this.ClientSize;
-        }
         this.Invalidate();
     }
     public Graphics MaakBitmapGraphics()
