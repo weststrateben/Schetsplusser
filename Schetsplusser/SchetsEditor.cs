@@ -22,6 +22,7 @@ public class SchetsEditor : Form
     {
         ToolStripDropDownItem menu = new ToolStripMenuItem("File");   // je maakt de File knop
         menu.DropDownItems.Add("Nieuw", null, this.nieuw);  // roept functie nieuw aan
+        //menu.DropDownItems.Add("Open", null, this.open);
         menu.DropDownItems.Add("Exit", null, this.afsluiten);   // roept functie afsluiten aan
         menuStrip.Items.Add(menu);
     }
@@ -47,8 +48,11 @@ public class SchetsEditor : Form
         s.Show();
     }
 
+
     private void afsluiten(object sender, EventArgs e)  // de Exit knop onder File
     {
         this.Close();
     }
+
+
 }

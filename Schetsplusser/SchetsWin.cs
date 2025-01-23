@@ -35,13 +35,36 @@ public class SchetsWin : Form
     private void opslaanAls(object o, EventArgs ea)
     {
         SaveFileDialog dialoog = new SaveFileDialog();
-        dialoog.Filter = "Bitmap|*.bmp|JPEG|*.jpg|PNG|*.png|All Files|*.*";
+        dialoog.Filter = "Bitmap|*.bmp|JPEG|*.jpg|PNG|*.png|Text files|*.txt|All Files|*.*";
         dialoog.Title = "Tekst opslaan als...";
         if (dialoog.ShowDialog() == DialogResult.OK)
         {
             Text = dialoog.FileName;
-            schrijfNaarFile(dialoog.FileName);
-            niet_opgeslagen = false;
+            if (dialoog.FileName.EndsWith(".txt"))
+            {
+                using (StreamWriter writer = new StreamWriter(dialoog.FileName))
+                {
+                    foreach (Elementen.Tekening tekening in tekeningen.elementen)
+                    {
+                        writer.Write($"{tekening.Tool}|");
+                        writer.Write($"{tekening.start_punt.X},{tekening.start_punt.Y}|");
+                        writer.Write($"{tekening.eind_punt.X},{tekening.eind_punt.Y}|");
+                        writer.Write($"{tekening.pen.Color.ToArgb()}|");
+                        writer.Write($"{tekening.pen.Width}");
+
+                        if (tekening.Tool == "tekst")
+                        {
+                            writer.Write($"|{tekening.Text}|");
+                            writer.Write($"{tekening.TextFont.Name},{tekening.TextFont.Size},{(int)tekening.TextFont.Style}");
+                        }
+                        writer.WriteLine();
+                    }
+                }
+            }
+            else
+            {
+                schrijfNaarFile(dialoog.FileName);
+            }
         }
     }
 

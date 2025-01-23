@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 
 public class SchetsControl : UserControl
@@ -96,6 +97,10 @@ public class SchetsControl : UserControl
     }
     public void Schoon(object o, EventArgs ea)
     {
+        foreach (var tekening in tekeningen.elementen.ToList())
+        {
+            tekeningen.Verwijder_Tekening(tekening);
+        }
         schets.Schoon();
         this.Invalidate();
     }
