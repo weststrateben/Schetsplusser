@@ -34,7 +34,7 @@ public class SchetsEditor : Form
     }
     private void about(object o, EventArgs ea)    // de tabs onder de Help knop
     {
-        MessageBox.Show("Schets versie 2.0\n(c) UU Informatica 2025\nJochem Truijman en Ben Weststrate"
+        MessageBox.Show("Schets versie 2.0\n(c) UU ModProg 2025\nJochem Truijman en Ben Weststrate"
                         , "Over \"Schets\""
                         , MessageBoxButtons.OK
                         , MessageBoxIcon.Information
