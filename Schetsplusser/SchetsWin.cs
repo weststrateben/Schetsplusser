@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -65,6 +66,44 @@ public class SchetsWin : Form
             {
                 schrijfNaarFile(dialoog.FileName);
             }
+        }
+    }
+
+    public void openVanTxt(object o, EventArgs ea)
+    {
+        OpenFileDialog dialoog = new OpenFileDialog();
+        dialoog.Filter = "Text files|*.txt";
+        dialoog.Title = "Tekst openen...";
+
+        if (dialoog.ShowDialog() == DialogResult.OK)
+        {
+            StreamReader reader = new StreamReader(dialoog.FileName);
+            string t = reader.ReadToEnd();
+            reader.Close();
+
+            string[] regels = t.Split('\n');
+            foreach (string regel in regels)
+            {
+                string[] onderdelen = regel.Split('|');
+                string[] startXY = onderdelen[1].Split(',');
+                string[] eindXY = onderdelen[2].Split(',');
+
+                Point startPunt = new Point(int.Parse(startXY[0]), int.Parse(startXY[1]));
+                Point eindPunt = new Point(int.Parse(eindXY[0]), int.Parse(eindXY[1]));
+                Pen pen = new Pen(Color.FromArgb(int.Parse(onderdelen[3])), int.Parse(onderdelen[4]));
+
+                if (onderdelen[0] == "tekst" && onderdelen.Length > 6)
+                {
+                    string[] fontInfo = onderdelen[6].Split(',');
+                    Font font = new Font(fontInfo[0], int.Parse(fontInfo[1]), (FontStyle)int.Parse(fontInfo[2]));
+                    new Elementen.Tekening(startPunt, eindPunt, pen, onderdelen[0], tekeningen, onderdelen[5], font);
+                }
+                else
+                    new Elementen.Tekening(startPunt, eindPunt, pen, onderdelen[0], tekeningen);
+            }
+
+            schetscontrol.Invalidate();
+            niet_opgeslagen = false;
         }
     }
 

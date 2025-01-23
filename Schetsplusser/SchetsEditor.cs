@@ -22,7 +22,7 @@ public class SchetsEditor : Form
     {
         ToolStripDropDownItem menu = new ToolStripMenuItem("File");   // je maakt de File knop
         menu.DropDownItems.Add("Nieuw", null, this.nieuw);  // roept functie nieuw aan
-        //menu.DropDownItems.Add("Open", null, this.open);
+        menu.DropDownItems.Add("Open", null, this.open);
         menu.DropDownItems.Add("Exit", null, this.afsluiten);   // roept functie afsluiten aan
         menuStrip.Items.Add(menu);
     }
@@ -34,7 +34,7 @@ public class SchetsEditor : Form
     }
     private void about(object o, EventArgs ea)    // de tabs onder de Help knop
     {
-        MessageBox.Show("Schets versie 2.0\n(c) UU Informatica 2022"
+        MessageBox.Show("Schets versie 2.0\n(c) UU Informatica 2025\nJochem Truijman en Ben Weststrate"
                         , "Over \"Schets\""
                         , MessageBoxButtons.OK
                         , MessageBoxIcon.Information
@@ -48,6 +48,13 @@ public class SchetsEditor : Form
         s.Show();
     }
 
+    private void open(object sender, EventArgs e)
+    {
+        SchetsWin s = new SchetsWin();
+        s.MdiParent = this;
+        s.Show();
+        s.openVanTxt(null, null);
+    }
 
     private void afsluiten(object sender, EventArgs e)  // de Exit knop onder File
     {

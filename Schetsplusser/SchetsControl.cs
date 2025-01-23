@@ -107,11 +107,24 @@ public class SchetsControl : UserControl
 
     public void Roteer(object o, EventArgs ea)
     {
+        int centerX = this.ClientSize.Width / 2;
+        int centerY = this.ClientSize.Height / 2;
+
+        foreach (Elementen.Tekening tekening in tekeningen.elementen.ToList())
+        {
+            int dx = tekening.start_punt.X - centerX;
+            int dy = tekening.start_punt.Y - centerY;
+            tekening.start_punt = new Point(centerX - dy, centerY + dx);
+
+            dx = tekening.eind_punt.X - centerX;
+            dy = tekening.eind_punt.Y - centerY;
+            tekening.eind_punt = new Point(centerX - dy, centerY + dx);
+        }
         schets.VeranderAfmeting(new Size(this.ClientSize.Height, this.ClientSize.Width));
         schets.Roteer();
-        this.Schoon(null, null);
         this.Invalidate();
     }
+
     public void VeranderKleur(object obj, EventArgs ea)
     {
         string kleurNaam = ((ComboBox)obj).Text;
