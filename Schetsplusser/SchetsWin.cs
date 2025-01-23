@@ -84,7 +84,7 @@ public class SchetsWin : Form
             string[] regels = t.Split('\n');
             foreach (string regel in regels)
             {
-                if (string.IsNullOrEmpty(regel)) continue;
+                if (regel == "") continue;
 
                 string[] onderdelen = regel.Split('|');
                 string[] startXY = onderdelen[1].Split(',');
