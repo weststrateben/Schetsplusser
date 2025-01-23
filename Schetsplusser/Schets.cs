@@ -41,7 +41,7 @@ public class Schets
     {
         Graphics gr = Graphics.FromImage(bitmap);
         gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
-        schetswin.unsavedChanges = false;
+        schetswin.niet_opgeslagen = false;
     }
     public void Roteer()  // flip de bitmap
     {

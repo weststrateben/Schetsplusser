@@ -9,8 +9,7 @@ public class SchetsControl : UserControl
     public Color penkleur;
     private Elementen tekeningen;
     private int diktevanlijn;
-    private Size originele_vorm;
-
+ 
     public Color PenKleur
     {
         get { return penkleur; }
@@ -30,7 +29,6 @@ public class SchetsControl : UserControl
         this.schets = new Schets(parent);
         this.Paint += this.teken;
         this.Resize += this.veranderAfmeting;
-        this.originele_vorm = this.Size;  
         this.veranderAfmeting(null, null); 
         this.DoubleBuffered = true;
     }
@@ -106,7 +104,7 @@ public class SchetsControl : UserControl
     {
         schets.VeranderAfmeting(new Size(this.ClientSize.Height, this.ClientSize.Width));
         schets.Roteer();
-        this.Schoon(null, null); // Verwijdert de bug met de zwarte vlakken bij het roteren
+        this.Schoon(null, null);
         this.Invalidate();
     }
     public void VeranderKleur(object obj, EventArgs ea)

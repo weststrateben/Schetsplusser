@@ -13,7 +13,7 @@ public class SchetsWin : Form
     Panel paneel;
     public Elementen tekeningen;
     bool vast;
-    public bool unsavedChanges = false;
+    public bool niet_opgeslagen = false;
 
     private void veranderAfmeting(object o, EventArgs ea)
     {
@@ -41,7 +41,7 @@ public class SchetsWin : Form
         {
             Text = dialoog.FileName;
             schrijfNaarFile(dialoog.FileName);
-            unsavedChanges = false;
+            niet_opgeslagen = false;
         }
     }
 
@@ -56,7 +56,7 @@ public class SchetsWin : Form
         else if (fileExtension == ".png")
             imageFormat = ImageFormat.Png;
         bitmap.Save(fs, imageFormat);
-        unsavedChanges = false;
+        niet_opgeslagen = false;
     }
     private void afsluiten(object obj, EventArgs ea) // voor de knop sluiten in menu
     {
@@ -72,7 +72,7 @@ public class SchetsWin : Form
         {
             vast = true;
             huidigeTool.MuisVast(schetscontrol, mea.Location);
-            unsavedChanges = true;
+            niet_opgeslagen = true;
         };
         schetscontrol.MouseMove += (object o, MouseEventArgs mea) =>    // muis vast en beweegt
         {
@@ -88,7 +88,7 @@ public class SchetsWin : Form
         schetscontrol.KeyPress += (object o, KeyPressEventArgs kpea) =>  // je drukt op een toets
         {
             huidigeTool.Letter(schetscontrol, kpea.KeyChar);
-            unsavedChanges = true;
+            niet_opgeslagen = true;
         };
         ISchetsTool[] deTools = { new PenTool()   // hier maken we echt de tools aan
                                 , new LijnTool()
@@ -128,7 +128,7 @@ public class SchetsWin : Form
     }
     private void SchetsWin_FormClosing(object sender, FormClosingEventArgs e)  // de functie die aangeroepen word als er iets gesloten wordt
     {
-        if (unsavedChanges)
+        if (niet_opgeslagen)
         {
             DialogResult result = MessageBox.Show("Er zijn wijzigingen die nog niet zijn opgeslagen. Wil je doorgaan zonder op te slaan?", "Waarschuwing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.No)

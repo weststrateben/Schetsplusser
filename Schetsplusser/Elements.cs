@@ -177,10 +177,10 @@ public class Elementen
 
         double tol = tekening.pen.Width / 2 + 3;
 
-        return Math.Abs(rechts - klik.X) <= tol ||
-               Math.Abs(links - klik.X) <= tol || 
-               Math.Abs(boven - klik.Y) <= tol || 
-               Math.Abs(onder - klik.Y) <= tol;
+        return Math.Abs(rechts - klik.X) <= tol && boven + tol > klik.Y && klik.Y > onder - tol||
+               Math.Abs(links - klik.X) <= tol && boven + tol > klik.Y && klik.Y > onder - tol ||
+               Math.Abs(boven - klik.Y) <= tol && rechts + tol > klik.Y && klik.Y > links - tol ||
+               Math.Abs(onder - klik.Y) <= tol && rechts + tol > klik.Y && klik.Y > links - tol;
     }
     public bool vlak(Point klik, Tekening tekening)
     {
