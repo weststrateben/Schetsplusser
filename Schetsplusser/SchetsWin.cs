@@ -84,18 +84,20 @@ public class SchetsWin : Form
             string[] regels = t.Split('\n');
             foreach (string regel in regels)
             {
+                if (string.IsNullOrEmpty(regel)) continue;
+
                 string[] onderdelen = regel.Split('|');
                 string[] startXY = onderdelen[1].Split(',');
                 string[] eindXY = onderdelen[2].Split(',');
 
                 Point startPunt = new Point(int.Parse(startXY[0]), int.Parse(startXY[1]));
                 Point eindPunt = new Point(int.Parse(eindXY[0]), int.Parse(eindXY[1]));
-                Pen pen = new Pen(Color.FromArgb(int.Parse(onderdelen[3])), int.Parse(onderdelen[4]));
+                Pen pen = new Pen(Color.FromArgb(int.Parse(onderdelen[3])), float.Parse(onderdelen[4]));
 
                 if (onderdelen[0] == "tekst" && onderdelen.Length > 6)
                 {
                     string[] fontInfo = onderdelen[6].Split(',');
-                    Font font = new Font(fontInfo[0], int.Parse(fontInfo[1]), (FontStyle)int.Parse(fontInfo[2]));
+                    Font font = new Font(fontInfo[0], float.Parse(fontInfo[1]), (FontStyle)int.Parse(fontInfo[2]));
                     new Elementen.Tekening(startPunt, eindPunt, pen, onderdelen[0], tekeningen, onderdelen[5], font);
                 }
                 else
